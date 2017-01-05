@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Assignment 3 - Treemaps</title>
+	<meta charset="utf-8">
+
+
+    <style>	
+  .box{
+    margin-right: 200px;
+    margin-left:300px;
+    border:thin solid-grey;
+    border-bottom: 1px solid #eee;
+  }
+	.node {
+		cursor: ew-resize;
+	}
+
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	  border-radius: 1px;
+	}
+
+	.node text {
+	  font: 6px sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+	.infobox {
+	text-align: left;
+  font-family: "Helvetica Neue",
+  Helvetica,Arial,sans-serif;  
+  color:grey;
+  font-size: 85%;
+  margin-right: 200px;
+  margin-left: 300px;
+  border: 1px solid grey;
+
+;
+
+	}
+	h1{
+	text-align: center;
+	font-family: "Helvetica Neue",
+  Helvetica,Arial,sans-serif;
+	color:#333;
+	font-size: 200%;
+}
+
+h2{
+  text-align: left;
+  font-family: "Helvetica Neue",
+  Helvetica,Arial,sans-serif;  
+  color:grey;
+  font-size: 100%;
+  margin-right: 200px;
+  margin-left: 300px;
+  border-bottom: 1px solid #eee;
+
+}
+
+h3{
+	font-family: "Helvetica Neue",
+  Helvetica,Arial,sans-serif;  
+  font-size:95%;
+  color:black;
+  border-bottom: 1px solid #eee;
+}
+    </style>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+d3.select(window).on('load',init)
+function init(){
+var treeData = [
+  {
+    "name": "UNDP CIAS",
+    "parent": "null",
+    "children": [
+      {
+        "name": "RBAP",
+        "parent": "UNDP CIAS",
+        "children": [
+           {"name": "Afghanistan"},
+           {"name": "Bangkok Regional Hub"},
+           {"name": "Bangladesh"},
+           {"name": "Bhutan"},
+           {"name": "Cambodia"},
+           {"name": "China"},
+           {"name": "Fiji"},
+           {"name": "Fiji - Pacific Centre"},
+           {"name": "India"},
+           {"name": "Indonesia"},
+           {"name": "Iran"},
+           {"name": "Japan"},
+           {"name": "Lao PDR"},
+           {"name": "Malaysia"},
+           {"name": "Malaysia – GSSC"},
+           {"name": "Maldives"},
+           {"name": "Mongolia"},
+           {"name": "Myanmar"},
+           {"name": "Nepal"},
+           {"name": "North Korea"},
+           {"name": "Pakistan"},
+           {"name": "Papua New Guinea"},
+           {"name": "Philippines"},
+           {"name": "Samoa"},
+           {"name": "Singapore Policy Centre"},
+           {"name": "Solomon Islands"},
+           {"name": "South Korea"},
+           {"name": "Sri Lanka"},
+           {"name": "Timor-Leste"},
+           {"name": "Vietnam"}  
+        ]
+      },
+      {
+        "name": "RBEC",
+        "parent": "UNDP CIAS",
+        "children":[
+        {"name": "Albania"},
+           {"name": "Armenia"},
+           {"name": "Azerbaijan"},
+           {"name": "Belarus"},
+           {"name": "Bosnia and Herzegovina"},
+           {"name": "Brussels UNDP CIAS Representation Office"},
+           {"name": "Croatia"},
+           {"name": "Cyprus - UNDP CIAS PFF"},
+           {"name": "Cyprus UNDP CIAS-ACT"},
+           {"name": "Denmark"},
+           {"name": "Istanbul Regional Hub"},
+           {"name": "Kazakhstan"},
+           {"name": "Kosovo"},
+           {"name": "Kyrgyzstan"},
+           {"name": "Macedonia"},
+           {"name": "Moldova"},
+           {"name": "Montenegro"},
+           {"name": "Romania"},
+           {"name": "Russia"},
+           {"name": "Serbia"},
+           {"name": "Switzerland"},
+           {"name": "Tajikistan"},
+           {"name": "Test Office Bratislava"},
+           {"name": "Turkey"},
+           {"name": "Turkmenistan"},
+           {"name": "Ukraine"},
+           {"name": "Uzbekistan"}
+        ]	
+      },
+      {
+        "name": "RBAS",
+        "parent": "UNDP CIAS",
+        "children":[
+        {"name": "Algeria"},
+           {"name": "Amman Regional Hub"},
+           {"name": "Bahrain"},
+           {"name": "Djibouti"},
+           {"name": "Egypt"},
+           {"name": "Iraq"},
+           {"name": "Jordan"},
+           {"name": "Kuwait"},
+           {"name": "Libya"},
+           {"name": "Morocco"},
+           {"name": "Programme of Assistance to the Palestinian People"},
+           {"name": "Regional Service Centre Egypt"},
+           {"name": "Saudi Arabia"},
+           {"name": "Somalia - Garowe Area office"},
+           {"name": "Somalia - Hargesia Area office"},
+           {"name": "Somalia - Mogadishu Country office"},
+           {"name": "Somalia - Nairobi support office"},
+           {"name": "Sudan"},
+           {"name": "Syria"},
+           {"name": "Tunisia"},
+           {"name": "UAE"},
+           {"name": "Yemen"}
+        ]	
+      },
+            {
+        "name": "RBA",
+        "parent": "UNDP CIAS",
+        "children":[
+        {"name": "Angola"},
+           {"name": "Benin"},
+           {"name": "Botswana"},
+           {"name": "Burkina Faso"},
+           {"name": "Burundi"},
+           {"name": "Cameroon"},
+           {"name": "Cape Verde"},
+           {"name": "Chad"},
+           {"name": "Comoros"},
+           {"name": "Congo (Brazzaville)"},
+           {"name": "Congo (Democratic Republic of)"},
+           {"name": "Côte d'Ivoire"},
+           {"name": "Equatorial Guinea"},
+           {"name": "Eritrea"},
+           {"name": "Ethiopia"},
+           {"name": "Gabon"},
+           {"name": "Gambia"},
+           {"name": "Ghana"},
+           {"name": "Guinea"},
+           {"name": "Guinea-Bissau"},
+           {"name": "Kenya"},
+           {"name": "Lesotho"},
+           {"name": "Liberia"},
+           {"name": "Madagascar"},
+           {"name": "Malawi"},
+           {"name": "Mali"},
+           {"name": "Mauritania"},
+           {"name": "Mauritius & Seychelles"},
+           {"name": "Mozambique"},
+           {"name": "Namibia"},
+           {"name": "Niger"},
+           {"name": "Nigeria"},
+           {"name": "Regional Service Center for Africa"},
+           {"name": "Regional Service Center for Africa _ Dakar Liaison Office"},
+           {"name": "Rwanda"},
+           {"name": "Sao Tome and Principe"},
+           {"name": "Senegal"},
+           {"name": "Sierra Leone"},
+           {"name": "South Africa"},
+           {"name": "South Sudan"},
+           {"name": "Swaziland"},
+           {"name": "Tanzania"},
+           {"name": "Togo"},
+           {"name": "Uganda"},
+           {"name": "Kenya"},
+           {"name": "Zambia"},
+           {"name": "Zimbabwe"},
+           {"name": "Yemen"}
+        ]	
+      },
+      {
+        "name": "RBLEC",
+        "parent": "UNDP CIAS",
+        "children":[
+        {"name": "Argentina"},
+           {"name": "Barbados & the OECS"},
+           {"name": "Belize"},
+           {"name": "Bolivia"},
+           {"name": "Brazil"},
+           {"name": "Chile"},
+           {"name": "Colombia"},
+           {"name": "Costa Rica"},
+           {"name": "Cuba"},
+           {"name": "Dominican Republic"},
+           {"name": "Ecuador"},
+           {"name": "El Salvador"},
+           {"name": "Guatemala"},
+           {"name": "Haiti"},
+           {"name": "Honduras"},
+           {"name": "Jamaica"},
+           {"name": "Mexico"},
+           {"name": "Paraguay"},
+           {"name": "Peru"},
+           {"name": "Regional Service Centre LAC"},
+           {"name": "Suriname"},
+           {"name": "Trinidad and Tobago"},
+           {"name": "Uruguay"},
+           {"name": "Venezuela"}
+        ]	
+      }
+    ]
+  }
+];
+
+
+// ************** Generate the tree diagram	 *****************
+var margin = {top: 50, right: 120, bottom: 20, left: 120},
+	width = 1200 - margin.right - margin.left,
+	height = 1000 - margin.top - margin.bottom;
+	
+var i = 0,
+	duration = 700,
+	root;
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.x, d.y]; }); 
+
+
+	// With this transformation, the links a drawn top-down
+
+	//source(function(d) { return {"x":d.source.y, "y":d.source.x}; })            
+    //.target(function(d) { return {"x":d.target.y, "y":d.target.x}; })
+    // .projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+root.x0 = height / 2;
+root.y0 = 0;
+  
+update(root);
+
+d3.select(self.frameElement).style("height", "500px");
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 300; });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+	  .on("click", click);
+
+  nodeEnter.append("circle")
+	  .attr("r", 1e-6)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeEnter.append("text")
+	  .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+	  .text(function(d) { return d.name; })
+	  .style("fill-opacity", 1e-6)
+	  .attr("transform", "rotate(-290)" );
+
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  nodeUpdate.select("circle")
+	  .attr("r", 3)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff" ; });
+
+  nodeUpdate.select("text")
+	  .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + source.x + "," + source.y + ")"; })
+	  .remove();
+
+  nodeExit.select("circle")
+	  .attr("r", 1e-6);
+
+  nodeExit.select("text")
+	  .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", function(d) {
+		var o = {x: source.x0, y: source.y0};
+		return diagonal({source: o, target: o});
+	  });
+
+  // Transition links to their new position.
+  link.transition()
+	  .duration(duration)
+	  .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+	  .duration(duration)
+	  .attr("d", function(d) {
+		var o = {x: source.x, y: source.y};
+		return diagonal({source: o, target: o});
+	  })
+	  .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+	d.x0 = d.y;
+	d.y0 = d.x;
+  });
+}
+
+// Toggle children on click.
+function click(d) {
+  if (d.children) {
+	d._children = d.children;
+	d.children = null;
+  } else {
+	d.children = d._children;
+	d._children = null;
+  }
+  update(d);
+}
+}
+</script>
+
+
+
+</head>
+<body>	
+<h1>Assignment 3 - Network or Tree Visualization</h1>
+<div class="box">
+<p>By Gregor Tränkle - <a href="hwd621@alumni.ku.dk">hwd621@alumni.ku.dk</a></p>
+</div>
+<h2>Instructions - Assignment 3</h2>
+<div class="infobox">
+<h3>Part 1: Review </h3>
+
+The first part of this assignment is to give a small piece of written feedback to one of the other submissions from week 2.<br></br>
+
+  1. Go to <a href="https://wouterboomsma.github.io/ide2016/assignments/">https://wouterboomsma.github.io/ide2016/assignments/</a> and find the little square on the course homepage that corresponds to your assignment 2. <br></br>
+  2. Go one square left (if you have the left-most assignment then go to the far right).<br></br>
+  3. Write down one thing that could be improved and one thing that was done well for that assignment.<br></br>
+
+<h3>Part 2: Network/Tree Data </h3>
+
+  1. Find a data set for which it is natural to use a network or tree visualization.<br></br>
+  2. Use D3 to create a visualization of this data, using for instance a graph (nodes and edges, for instance using a force-directed layout), an adjacency matrix, or a tree map. <br></br>
+  3. Motivate the choice of visualization idiom, and other choices you made (e.g., color, channels, marks). <br></br>
+  4. Finally, consider if/how the visualization could be improved by adding an interactive element. <br></br>
+  </div>
+
+<h2>Part 1 - Review</h2> 
+<div class="infobox">According to the instructions I revied the following <a href="http://rotendahl.dk/IDE/assignments/3/index.html">vis-approach.</a>
+<br></br>
+<h3>What was good:</h3>
+The hoovering function offers additional data on demand. Espacially in large data sets like this, it is very helpful to indentify specific nodes. 
+
+<h3>What was bad:</h3>  As the authors already mention, the data set is way to big to use the underlying idiom. One idea could have been to add filters or zoomable interaction idioms in order to reduce the amount of infoamtion in the graph. 
+</div>
+<h2>Part 2 - network or tree visualization</h2>
+<div class="infobox">
+<h3>1. Find a data set</h3> Within my working environment I found a dataset offering the dependecies between UNDP, its regions and the related countries.
+<h3>2. D3 - Visualization</h3> 
+1. <a href="http://bl.ocks.org/d3noob/8375092">Source - Approach 1</a><br></br>
+2. <a href="http://bl.ocks.org/d3noob/8375092">Source - Approach 2</a>
+<h3>3. Motivation</h3> I decided to implement a simple tree map in order to visualize the organisational dependecies between the office located in Copenhagen (UNDP CIAS) the regional hubs (RBAP, RBEC, RBAS, RBA, RBLAC) and the country offices of UNDP. For my initial approach I implemented the underlying <a href="http://bl.ocks.org/d3noob/8375092">layout</a>.  
+<h3>Challenge and Constraints</h3> According to the <a href="http://bl.ocks.org/d3noob/8375092">layout</a> used for the initial visualization approach I didn't implemented any interaction within the visualization. As we can see, the dataset is way too large in order to visualize the information/depedencies/hierachical structure properly. My first idea was to add an interaction in order to hide/unhide the regional hubs and country offices the user is interested in. After some research in the web and some trail and error approaches, I managed to find a solution: On the basis of the <a href="http://bl.ocks.org/d3noob/8375092">underlying layout</a> I implemented an interactive tree map in order to visualize the data set. By clicking the nodes, the user is able to hide/unhide the desired information. This enables to user to adjust the visualization in a way that offers only information which is needed. Unfortunately the dataset didn't offer any values to visualize magnitude channels.<br></br>
+</div>
+</body>
+</html>
